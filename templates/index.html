@@ -1,0 +1,415 @@
+<html><head><base href="https://snoopybirthdayparty.com/">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>¡Súper Fiesta de Cumpleaños de Snoopy!</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Comic+Neue:wght@700&display=swap');
+
+  body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Comic Neue', cursive;
+    background: linear-gradient(180deg, #87CEEB 0%, #E0F7FA 100%);
+    overflow: hidden;
+  }
+  .container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+  .sky {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70%;
+    background: linear-gradient(180deg, #87CEEB 0%, #E0F7FA 100%);
+    overflow: hidden;
+  }
+  .grass {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 30%;
+    background: linear-gradient(180deg, #8fdc7d 0%, #4caf50 100%);
+    border-top: 10px solid #795548;
+  }
+  .house {
+    width: 40%;
+    height: 60%;
+    position: absolute;
+    bottom: 30%;
+    left: 30%;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300"><rect x="50" y="100" width="200" height="150" fill="%23ff6b6b"/><polygon points="50,100 150,20 250,100" fill="%23ff9ff3"/><rect x="120" y="170" width="60" height="80" fill="%234bcffa"/><circle cx="170" cy="210" r="5" fill="%23feca57"/></svg>') no-repeat center center;
+    background-size: contain;
+    cursor: pointer;
+    transition: transform 0.3s;
+    animation: float 3s ease-in-out infinite;
+    z-index: 2;
+  }
+  .house:hover {
+    transform: scale(1.1) rotate(5deg);
+  }
+  #videoContainer {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    z-index: 1000;
+  }
+  #invitationVideo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 90%;
+    max-height: 90%;
+    border: 10px solid #FFF;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(255,255,255,0.5);
+  }
+  #formContainer {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    z-index: 1001;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    max-width: 80%;
+    width: 400px;
+  }
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  input, select, button {
+    margin: 10px 0;
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #4bcffa;
+    border-radius: 10px;
+    font-family: 'Comic Neue', cursive;
+  }
+  button {
+    background: #ff6b6b;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  button:hover {
+    background: #ff9ff3;
+  }
+  h2 {
+    color: #4bcffa;
+    text-align: center;
+    margin-bottom: 20px;
+    font-family: 'Fredoka One', cursive;
+  }
+  .balloons {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .balloon {
+    position: absolute;
+    width: 40px;
+    height: 50px;
+    border-radius: 50%;
+    animation: float-balloon 15s infinite;
+    transition: transform 0.3s ease;
+  }
+  .balloon:hover {
+    transform: scale(1.2) rotate(10deg);
+  }
+  .cloud {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    animation: float-cloud 30s linear infinite;
+    transition: transform 0.3s ease;
+  }
+  .cloud:hover {
+    transform: scale(1.1) translateY(-10px);
+  }
+  .tree {
+    position: absolute;
+    bottom: 30%;
+    width: 100px;
+    height: 150px;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 150"><rect x="40" y="100" width="20" height="50" fill="%23795548"/><circle cx="50" cy="80" r="40" fill="%234caf50"/><circle cx="50" cy="50" r="30" fill="%238bc34a"/></svg>') no-repeat center center;
+    background-size: contain;
+    transition: transform 0.3s ease;
+  }
+  .tree:hover {
+    transform: scale(1.1) rotate(5deg);
+  }
+  .sun {
+    position: absolute;
+    top: 50px;
+    right: 50px;
+    width: 80px;
+    height: 80px;
+    background: yellow;
+    border-radius: 50%;
+    box-shadow: 0 0 20px yellow;
+    animation: pulse 2s infinite alternate;
+    transition: transform 0.3s ease;
+  }
+  .sun:hover {
+    transform: scale(1.2) rotate(45deg);
+  }
+  .banner {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #ff9ff3;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-family: 'Fredoka One', cursive;
+    font-size: 24px;
+    color: white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    z-index: 3;
+    white-space: nowrap;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+  }
+  @keyframes float-balloon {
+    0% { transform: translateY(100vh) translateX(0) rotate(0deg); }
+    100% { transform: translateY(-100px) translateX(100px) rotate(360deg); }
+  }
+  @keyframes float-cloud {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.1); }
+  }
+
+  /* Responsive styles */
+  @media (max-width: 768px) {
+    .house {
+      width: 60%;
+      height: 50%;
+      left: 20%;
+    }
+    .banner {
+      font-size: 18px;
+      padding: 8px 16px;
+    }
+    .sun {
+      width: 60px;
+      height: 60px;
+      top: 30px;
+      right: 30px;
+    }
+    .tree {
+      width: 80px;
+      height: 120px;
+    }
+    #formContainer {
+      width: 90%;
+      padding: 20px;
+    }
+    h2 {
+      font-size: 24px;
+    }
+    input, select, button {
+      font-size: 14px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .house {
+      width: 80%;
+      height: 40%;
+      left: 10%;
+    }
+    .banner {
+      font-size: 16px;
+      padding: 6px 12px;
+    }
+    .sun {
+      width: 50px;
+      height: 50px;
+      top: 20px;
+      right: 20px;
+    }
+    .tree {
+      width: 60px;
+      height: 90px;
+    }
+    #formContainer {
+      width: 95%;
+      padding: 15px;
+    }
+    h2 {
+      font-size: 20px;
+    }
+    input, select, button {
+      font-size: 12px;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="sky">
+    <div class="sun"></div>
+  </div>
+  <div class="grass"></div>
+  <div class="house" onclick="showVideo()"></div>
+  <div class="balloons"></div>
+  <div class="banner">¡Fiesta de Cumpleaños de Snoopy!</div>
+</div>
+
+<div id="videoContainer">
+  <video id="invitationVideo" controls>
+    <source src="https://snoopybirthdayparty.com/invitation-video.mp4" type="video/mp4">
+    Tu navegador no soporta el elemento de video.
+  </video>
+</div>
+
+<div id="formContainer">
+  <form id="rsvpForm">
+    <h2>¡Confirma tu asistencia!</h2>
+    <input type="text" id="name" placeholder="Tu nombre" required>
+    <input type="email" id="email" placeholder="Tu email" required>
+    <select id="attendance" required>
+      <option value="">¿Vendrás a la fiesta?</option>
+      <option value="yes">¡Sí, allí estaré!</option>
+      <option value="no">Lo siento, no podré ir</option>
+    </select>
+    <button type="submit">¡Enviar respuesta!</button>
+  </form>
+</div>
+
+<script>
+function showVideo() {
+  document.getElementById('videoContainer').style.display = 'block';
+  const video = document.getElementById('invitationVideo');
+  
+  video.play().catch(error => {
+    console.log("Auto-play was prevented. User interaction is required to play the video.");
+  });
+  
+  video.onended = showForm;
+}
+
+function showForm() {
+  document.getElementById('videoContainer').style.display = 'none';
+  document.getElementById('formContainer').style.display = 'block';
+}
+
+document.getElementById('rsvpForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const name = document.getElementById('name').value;
+  const email = document.getElementById('email').value;
+  const attendance = document.getElementById('attendance').value;
+  
+  console.log('Nombre:', name);
+  console.log('Email:', email);
+  console.log('Asistencia:', attendance);
+  
+  alert('¡Gracias por confirmar! ¡Nos vemos en la fiesta!');
+  document.getElementById('formContainer').style.display = 'none';
+});
+
+function createBalloons() {
+  const balloonColors = ['#ff6b6b', '#4bcffa', '#ff9ff3', '#feca57', '#48dbfb', '#ff9ff3'];
+  const balloonsContainer = document.querySelector('.balloons');
+  
+  for (let i = 0; i < 20; i++) {
+    const balloon = document.createElement('div');
+    balloon.classList.add('balloon');
+    balloon.style.left = `${Math.random() * 100}%`;
+    balloon.style.animationDelay = `${Math.random() * 15}s`;
+    balloon.style.backgroundColor = balloonColors[Math.floor(Math.random() * balloonColors.length)];
+    balloon.style.pointerEvents = 'auto';
+    balloonsContainer.appendChild(balloon);
+  }
+}
+
+function createClouds() {
+  const sky = document.querySelector('.sky');
+  for (let i = 0; i < 5; i++) {
+    const cloud = document.createElement('div');
+    cloud.classList.add('cloud');
+    cloud.style.top = `${Math.random() * 50}%`;
+    cloud.style.left = `${Math.random() * 100}%`;
+    cloud.style.width = `${50 + Math.random() * 100}px`;
+    cloud.style.height = `${30 + Math.random() * 50}px`;
+    cloud.style.animationDuration = `${30 + Math.random() * 20}s`;
+    sky.appendChild(cloud);
+  }
+}
+
+function createTrees() {
+  const container = document.querySelector('.container');
+  for (let i = 0; i < 3; i++) {
+    const tree = document.createElement('div');
+    tree.classList.add('tree');
+    tree.style.left = `${10 + i * 40}%`;
+    tree.style.transform = `scale(${0.5 + Math.random() * 0.5})`;
+    container.appendChild(tree);
+  }
+}
+
+function adjustElementsForMobile() {
+  const isMobile = window.innerWidth <= 768;
+  const trees = document.querySelectorAll('.tree');
+  
+  if (isMobile) {
+    trees.forEach((tree, index) => {
+      tree.style.left = `${5 + index * 45}%`;
+      tree.style.transform = `scale(${0.4 + Math.random() * 0.3})`;
+    });
+  } else {
+    trees.forEach((tree, index) => {
+      tree.style.left = `${10 + index * 40}%`;
+      tree.style.transform = `scale(${0.5 + Math.random() * 0.5})`;
+    });
+  }
+}
+
+function addElementsHoverEffect() {
+  const elements = document.querySelectorAll('.balloon, .cloud, .tree, .sun');
+  elements.forEach(element => {
+    element.addEventListener('mouseover', () => {
+      element.style.transform = 'scale(1.2) rotate(10deg)';
+    });
+    element.addEventListener('mouseout', () => {
+      element.style.transform = '';
+    });
+  });
+}
+
+window.addEventListener('load', () => {
+  createBalloons();
+  createClouds();
+  createTrees();
+  adjustElementsForMobile();
+  addElementsHoverEffect();
+});
+
+window.addEventListener('resize', adjustElementsForMobile);
+</script>
+</body>
+</html>
